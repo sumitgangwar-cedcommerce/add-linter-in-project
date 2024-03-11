@@ -1,4 +1,4 @@
 {
-  "*.{js,jsx,ts,tsx}": "eslint",
-  "*.html": ["eslint"]
+  "*.{js,jsx,ts,tsx}": "eslint --ignore-path .gitignore --cache --fix",
+  "*.html": ["eslint --ignore-path .gitignore"]
 }
