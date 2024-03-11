@@ -1,46 +1,144 @@
-# Getting Started with Create React App
+To add a typo checker in project by using eslint-plugin needs to follow below steps:
+## Step 1 : install and set config of eslint
+```bash
+cmd :- npm init @eslint/config
+```
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+It asks some details:
+  How would you like to use ESLint? … 
+  To check syntax only
+▸ To check syntax and find problems
+  To check syntax, find problems, and enforce code style
 
-## Available Scripts
+choose as you need. I choose option 2 "To check syntax and find problems"
 
-In the project directory, you can run:
+> What type of modules does your project use? … 
+▸ JavaScript modules (import/export)
+  CommonJS (require/exports)
+  None of these
 
-### `npm start`
+choose as you need. I choose option 1 "JavaScript modules (import/export)"
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+> Which framework does your project use? … 
+▸ React
+  Vue.js
+  None of these
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+choose as you need. I choose option 1 "React"
 
-### `npm test`
+> Does your project use TypeScript? ‣ No / Yes
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+If you are using ts then choose yes otherwise No .
+I choose yes
 
-### `npm run build`
+> Where does your code run? 
+✔ Browser
+✔ Node
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Choose Browser
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+> What format do you want your config file to be in? … 
+▸ JavaScript
+  YAML
+  JSON
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+choose format of .eslintrc file type 
+I choose JSON
 
-### `npm run eject`
+Now install dependencies which suggested by eslint
+If it shows error while installing dependencies then you can manually install dependencies using --force
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+In above case I use
+```bash
+ npm i --force @typescript-eslint/eslint-plugin@latest eslint plugin-react@latest @typescript-eslint/parser@latest eslint@latest
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Now, a eslintrc.json file is created in your root directory
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Step 2: Install spell-check plugin
+```bash
+    cmd : npm install eslint-plugin-spellcheck
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+put below code in eslintrc file in rule section
 
-## Learn More
+`"spellcheck/spell-checker": ["error",
+       {
+           "comments": true,
+           "strings": true,
+           "identifiers": true,
+           "templates": true,
+           "lang": "en_US",
+           "skipWords": [
+               "dict",
+               "aff",
+               "hunspellchecker",
+               "hunspell",
+               "utils"
+           ],
+           "skipIfMatch": [
+               "http://[^s]*",
+               "^[-\\w]+\/[-\\w\\.]+$"
+           ],
+           "skipWordIfMatch": [
+               "^foobar.*$"
+           ],
+           "minLength": 3
+        }
+    ]`
+    
+and add "spellcheck" in plugins array For eg :-  `"plugins": ["@typescript-eslint", "react", "spellcheck"]`
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+and add `"settings": {
+    "react": {
+      "version": "detect"
+    }
+  }`  to detect version of react automatically
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+
+This is used to set the rules of spell checking
+Ref : https://www.npmjs.com/package/eslint-plugin-spellcheck
+
+## Step 3 : Add a script in package.json file in script section
+`"lint": "eslint ."`
+
+This is done to run the linter manually
+
+Now, eslint and spell check is installed in your project .
+You can run cmd : npm run lint
+
+It should detect spelling error in your code.
+
+## Step 4: Now , if you want to run eslint just before commiting to github for this it needs to install `husky`. 
+```bash
+cmd : npm i husky
+```
+
+and add a script in `package.json` file in script section :- `'prepare' : "instal husky"` . This is done to ensure that every collabarator has install husky
+```bash
+cmd : npx husky-init
+to make config of husky in project
+```
+
+Now, a `.husky` folder is created in root directory .
+Go to .husk folder and open pre-commit file and replace `npm test` to `npm run lint` to run you linter before commiting you file automatically.
+Now you can check if lint is running when commit happens 
+
+## Step 5: To run only those files which have changes . Don't want to run linter for whole codebase when commiting for this it needs to install lint-staged package 
+```bash
+cmd : npm install --save-dev lint-staged
+```
+Now, Inside `.husky/pre-commit` replace `npm run lint` with `npx lint-staged`
+
+Now , in your root directory create a file `.lintstagedrc.json` and add `{
+  "*.{js,jsx,ts,tsx}": "eslint --ignore-path .gitignore --cache --fix",
+  "*.html": ["eslint --ignore-path .gitignore"]
+}
+` in this file.
+
+Now, lint-staged is setup in project.
+
+You can test it by commiting in you project
+
+
+
