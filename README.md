@@ -127,7 +127,7 @@ npm i husky
 
 and add a script in `package.json` file in script section :- `'prepare' : "instal husky"` . This is done to ensure that every collabarator has install husky
 ```bash
-cmd : npx husky-init
+npx husky-init
 ```
 to make config of husky in project
 
