@@ -16,7 +16,7 @@
   "plugins": ["@typescript-eslint", "react", "spellcheck"],
   "rules": {
     "spellcheck/spell-checker": [
-      "warn",
+      "error",
       {
         "comments": true,
         "strings": true,
