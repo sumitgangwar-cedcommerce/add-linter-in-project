@@ -4,8 +4,8 @@ To add a typo checker in project by using eslint-plugin needs to follow below st
 npm init @eslint/config
 ```
 
-> It asks some details:
-* How would you like to use ESLint? 
+It asks some details:
+> How would you like to use ESLint? 
 * To check syntax only 
 * To check syntax and find problems 
 * To check syntax, find problems, and enforce code style 
